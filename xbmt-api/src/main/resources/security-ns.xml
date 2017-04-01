@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+		
+	<!-- 
+	
+	第二种、【spring-security + HTTP摘要认证】
+          为一个REST服务使用Spring Security的基本和摘要认证  http://my.oschina.net/buwei/blog/193576  
+     Spring Http Basic（基本）和Digest（摘要）验证  http://blog.csdn.net/mrcharles/article/details/50475467
+     http协议之digest(摘要)认证   http://blog.csdn.net/jszj/article/details/8918967
+          相关后台代码：
+	com.xbmt.api.controller.LoginAuth2Controller
+	com.xbmt.auth2.**.java
+	com.xbmt.auth2.MyDigestAuthenticationEntryPoint
+	com.xbmt.auth2.MyDigestAuthenticationFilter
+	com.xbmt.auth2.MyTokenUtils
+	com.xbmt.auth2.MyDigestAuthUtils
+	前台代码：LoginCtrl2、UserService2、Auth、UserInterceptor2
+	 login.html、app.js 等
+	  security-ns(HTTP摘要认证).xml
+	  
+	  问题：由于此种方式是通过浏览器弹出框 提示用户登录，存在问题 不能嵌入自己的登录，所以考虑重写过滤器 和  切入点类 返回json格式
+	  
+	  已经初步解决该问题 并测试成功2016-07-15
+	 -->	
+		
+		
+	<security:http pattern="/**/*.png" security="none" />
+	<security:http pattern="/**/*.gif" security="none" />
+	<security:http pattern="/**/*.jpg" security="none" />
+	<security:http pattern="/**/*.css" security="none" />
+	<security:http pattern="/**/*.js" security="none" />
+	<security:http pattern="/**/*.ico" security="none" />
+	<security:http pattern="/**/*.eot" security="none" />
+	<security:http pattern="/**/*.ttf" security="none" />
+	<security:http pattern="/**/*.woff" security="none" />
+	<!-- 后台登录验证码 -->
+	<security:http pattern="/captcha.svl"  security="none"/>
+		
+	<security:http pattern="/test/**" security="none"/>
+	<!-- 上传的文件  不需要安全认证-->
+	<security:http pattern="/uploadDir/**" security="none"/>
+	<!-- 前台  不需要安全认证 -->
+	<security:http pattern="/front/**" security="none"/>
+	<security:http pattern="/html/**" security="none"/>
+	<security:http pattern="/swf/**" security="none"/>
+	<security:http pattern="/app/**" security="none"/>
+	
+	<security:http pattern="/api/auth2/getToken" security="none" />
+	
+	<!-- RESTful API接口  安全配置-->
+	<bean id="userDetailsService" class="com.xbmt.auth.UserDetailServiceImpl">
+		<property name="userService" ref="sys.userService" />
+	</bean>
+																     
+	
+	<security:http create-session="stateless" entry-point-ref="digestEntryPoint">
+		
+		 <security:intercept-url pattern="/api/**" access="ROLE_USER" /> 
+	
+	     <security:http-basic />
+	   <!-- <security:custom-filter position="BASIC_AUTH_FILTER" ref="authenticationFilter" /> -->
+	    <!--<security:custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER" />  before  after-->
+		 <security:custom-filter  after="BASIC_AUTH_FILTER" ref="digestFilter"/> 
+	</security:http>
+	
+	 <security:global-method-security secured-annotations="enabled" />
+
+     <!-- org.springframework.security.web.authentication.www.DigestAuthenticationFilter -->
+	<bean id="digestFilter" class="com.xbmt.auth2.MyDigestAuthenticationFilter" >
+		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="authenticationEntryPoint" ref="digestEntryPoint" />
+		<!-- userCache 注入自定义实现User缓存机制 ,需要实现接口：org.springframework.security.core.userdetails.UserCache
+		<property name="userCache" ref="myUserCache" /> -->
+		 <!--  通过passwordAlreadyEncoded属性指定密码是否已经加密 -->
+	</bean>
+	<!-- org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint -->
+	<bean id="digestEntryPoint" class="com.xbmt.auth2.MyDigestAuthenticationEntryPoint">
+		<property name="realmName" value="Contacts Realm via Digest Authentication" />
+		<property name="key" value="acegi" />
+		<property name="nonceValiditySeconds" value="120"/><!-- 秒钟  通过nonceValiditySeconds属性来决定过期时间（默认300，等于5分钟） -->
+	</bean>
+
+	<!-- id="authenticationManager"  这个地方 只能配置 alias 别名属性，配置id 会出现异常，不能识别-->
+	<security:authentication-manager  alias="authenticationManager" erase-credentials="false">
+		<security:authentication-provider user-service-ref="userDetailsService" />
+	</security:authentication-manager>
+	
+</beans>

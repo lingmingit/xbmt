@@ -1,0 +1,22 @@
+
+
+
+html, body{ 
+	width: 100%; height: 100%; padding: 0; margin: 0;overflow: hidden;
+	}
+div{
+	overflow: hidden;
+}
+ #north-panel{
+	/**background: url("../images/header-bg.jpg") repeat-x scroll 0 0;***/
+	text-align: center;
+}
+
+
+
+#buttonbar{
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	right:0px;
+}

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/data/jpa
+		http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/jee 
+		http://www.springframework.org/schema/jee/spring-jee-3.1.xsd">
+	<!-- *******************************************支持注解方式*********************************************************** -->
+	<!-- <import resource="classpath:security-ns2.xml" /> -->
+	<import resource="classpath:security-ns.xml" />
+	
+	<context:annotation-config/>
+	<!-- dao、service 应用扫描包配置 -->
+	<context:component-scan base-package="com.xbmt.test.dao.*" />
+	<context:component-scan base-package="com.xbmt.test.service.*" />
+	<context:component-scan base-package="com.xbmt.**.dao.*" />
+	<context:component-scan base-package="com.xbmt.**.service.*" />
+	
+	<!-- spring 上下文容器初始化辅助类（非controller之外的地方） -->
+	<bean id="springContextUtil" class="com.xbmt.common.web.SpringContextUtil">
+		<property name="userServerName" value="sys.userService"/>
+	</bean>
+	
+	<!-- 配置属性文件获取 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/classes/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- c3p0 数据源 的配置  -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="autoCommitOnClose" value="true"/>
+		<property name="checkoutTimeout" value="${cpool.checkoutTimeout}"/>
+		<!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间，Default: 3 -->
+		<property name="initialPoolSize" value="${cpool.minPoolSize}"/>
+		<!--连接池中保留的最小连接数-->
+		<property name="minPoolSize" value="${cpool.minPoolSize}"/>
+		<!--连接池中保留的最大连接数，Default: 15 -->
+		<property name="maxPoolSize" value="${cpool.maxPoolSize}"/>
+		<!--最大空闲时间,60秒内未使用则连接被丢弃，若为0则永不丢弃，Default: 0 -->
+		<property name="maxIdleTime" value="${cpool.maxIdleTime}"/>
+		<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数，Default: 3 -->
+		<property name="acquireIncrement" value="${cpool.acquireIncrement}"/>
+		<property name="maxIdleTimeExcessConnections" value="${cpool.maxIdleTimeExcessConnections}"/>
+	</bean>
+	
+	<!-- *******************************************JPA实体管理*********************************************************** -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />  
+		 <!-- <property name="persistenceXmlLocation" value="classpath:persistence-app.xml" />  
+		 	网上说通过该属性指定配置文件，经过测试不生效，不起作用所以注释 
+		 	http://www.cnblogs.com/taven/p/3351841.html【JPA 不在 persistence.xml 文件中配置每个Entity实体类的2种解决办法】
+		 -->
+		 <property name="packagesToScan" >
+        	<list>
+        		<value>com.xbmt.framework.entity.sys</value>
+        		<value>com.xbmt.sys.entity</value>
+        		<value>com.xbmt.test.entity</value>
+        	</list>
+        </property>
+        <property name="jpaVendorAdapter">  
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">  
+                <!-- <property name="showSql" value="true" /> -->
+				 <property name="generateDdl" value="true" /> <!--  设置true 才能生产数据库表结构-->
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect" /><!-- org.hibernate.dialect.OracleDialect org.hibernate.dialect.MySQL5InnoDBDialect  -->
+            </bean>  
+        </property>
+        	<property name="jpaProperties">
+		  <props>
+		   	<prop key="hibernate.show_sql">true</prop>
+		   	<prop key="hibernate.format_sql">true</prop>
+		   	<prop key="hibernate.hbm2ddl.auto">update</prop>
+		   	<prop key="hibernate.cache.use_query_cache">false</prop>
+		   	<prop key="javax.persistence.validation.mode">none</prop>
+		   	<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+		  </props>
+		 </property> 
+	</bean>
+	<!-- *******************************************JPA事务管理*********************************************************** -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
+	<!-- 启用annotation的方式管理事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	
+	<!-- *********************************************数据源管理配置******************************************************** -->
+	<!--JdbcTemplate Configuration  -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+		<!-- 国际化配置 -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>config/i18n/messages</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Spring theme 配置 -->
+	<bean id="themeResolver" class="org.springframework.web.servlet.theme.FixedThemeResolver">
+		<property name="defaultThemeName" value="properties/config" />
+	</bean>
+	
+</beans>

@@ -1,0 +1,170 @@
+
+
+2016-07-19 面试程序题 测试
+
+
+28、将数字转换为中文可读数字
+		com.sft.NumToZhString
+		实现思路：
+   1、定义中文数字数组[零 - 九]、中文单位(4位)[个 - 万，其中个为'']、中文数字单位(5位以上)[万、万、亿、万亿]
+   2、首先将数字字符串按4位进行循环分割出来，分割长度按取整数大，同时计算截取起始位置、结算位置()
+   	  2.1、按字符串顺序截取算法								     120303
+   	  2.2、当循环第一个 并且 模数不等于0，起始位置0，结束位置为模数      12
+   	  2.3、否则 本次的结束位置 作为 下次的起始位置
+   3、将分割截取好的每一个数字字符串进行字符循环分割，转换为可读中文
+   	    注意两个以上0(如果前面一个为0，则后面不需要再增加0)和最后一个数字为0的时候(截取)，并且0不需要单位
+   	  将字符串中的每个char转换具体int类型值，匹配中文数字数组
+   4、再进行分割字符串转换后的拼接包括单位
+              根据循环索引匹配大中文单位数组，int maxIndex = len; zhNumUnits2[maxIndex - index - 1]，
+              最大索引小于4位分割串的长度len，按从大到小匹配数组(因4位分割串是按大到小)，最后一位不需要单位
+		
+27、类初始化顺序，包括静态块
+	com.classinit.HelloB 
+		单个 类初始化顺序： 静态代码块 -->  代码块  -->  构造方法
+		父子类初始化顺序：父类静态代码块  --> 子类静态代码块   --> 父类代码块   -->  父类构造方法   --> 子类代码块   --> 子类构造方法
+		 1、父类静态块
+		 * 2、子类静态块
+		 * 3、父类代码块
+		 * 4、父类构造方法
+		 * 5、子类代码块
+		 * 6、子类构造方法
+		 
+	Java对象初始化顺序  链接：http://www.importnew.com/21832.html
+	 	 
+	如果有一个明确地赋值 null 的操作，执行流程会略有不同：当父类构造器完成后，在其余的构造器运行前，任何变量初始化都会执行（参见java语言规范12.5节）。
+	在这种情况下，之前赋值给 lowerString 的字符串引用会再一次被赋予 null 。然后继续执行其余的函数构造，现在打印 lowerString 的值为: null 。	 
+
+26、抢红包 测试 qhb
+
+
+25、java序列化测试
+	http://blog.csdn.net/liuxiao723846/article/details/52005532  java中序列化之子类继承父类序列化
+	拓尔思 面试题
+    com.serializables.Circle
+    
+
+24、关于斐波那契数列
+	 m[0]=m[1]=1;  m[i]=m[i-1]+m[i-2];
+	http://blog.csdn.net/duxinfeng2010/article/details/7770354
+	古典问题：有一对兔子，从出生后第3个月起每个月都生一对兔子，小兔子长到第三个月后每个月又生一对兔子，假如兔子都不死，问每个月的兔子总数为多少？
+	
+23、测试 Switch 的用法
+	 String(JDK1.7之后支持)、int、Integer、char 和 byte支持，long、float、double不支持
+
+22、测试同步  synchronized 方法 的 使用
+	com.threads.synchronizeds.ThreadTest_01
+	com.threads.synchronizeds.ThreadTest_02
+	com.threads.synchronizeds.ThreadTest_03
+
+21、测试 线程 中的变量共享问题[编译器优化导致 变量可见性问题]
+	com.threads.tst.VisibilityTest
+
+20、用AtomicStampedReference解决ABA问题
+	com.concurrents.atomic.ABATest
+	
+
+19、java1.7中动态类型语言测试  MethodHandle | invokedynamic指令
+	com.invokedynamic.MethodHandleTest 
+	com.invokedynamic.InvokeDynamicTest
+
+18、测试抽象类是否可以继承普通类，测试结果可以
+	com.abstracts.TestApp
+
+17、Java到底是传引用还是传值? 函数参数
+	FunctionParmObjectRef
+    Java确实使用对象的引用来做计算的，所有的对象变量都是引用。 但是，Java在向方法传递参数时传的不是引用，是值。
+    
+16、（算法）从10000个数中找出最大的10个
+       TestLookupMax10Num
+       
+       
+15、（JAVA）已知一个数组中的数有序排列,编程实现插入一个数后,依然有序.
+	TestArrayInsert
+	  第一种,就是常规的想法,:建个数组,然后逐个比较
+              第二种  将新元素添加到List中，再进行sort排序即可
+14、给一个有序数组和一个数s，求数组中两数和等于s的组合 
+    TestArraysTwoSum
+           此时我们就会想到两个元素同时移动，于是很容易就会想到两个元素向中间靠拢的方法，如果两个数的和小了，则左边元素右移，大了则右边元素左移。
+ * 总结：此题的妙点在于两边同时开始遍历。
+  
+ 
+13、String 、char[]数组 方法内改变是否影响全局变量
+      StringQuoteTest
+          * 1、String类型方法内修改不影响全局变量（String 不可变）
+ 		 * 2、String[] 、char[]数组是引用类型，方法内修改会影响全局变量
+12、catch捕获多异常测试
+       ExceptionTest
+        * 1、子类异常先捕获，必须放catch前面，否则编译不通过
+ 		* 2、catch块只捕获一次，并且是从子类先匹配，匹配后即不执行后续catch块
+11、逻辑表达式
+	ExpressionTest
+	 * 1、三元表达式运算
+ 	* 2、先++还是后++， 运算符在前面就是 先++再比较或运算，如果再后面 先比较或运算后再++
+10、 测试 Set 对应 hashCode() equals() 方法
+   Set 是不能添加重复的元素，主要跟 hashCode() 、  equals() 有关系
+	SetTest
+9、 测试 String equals()  == 的区别
+	StringEqualsTest
+     DemoStringCreation  这些字符串的创建方式之间有什么区别呢？使用new运算符、使用字符串常量或者常量表达式
+8、测试线程 直接调用run() 方法
+	com.base.ThreadTest
+	
+7、NULL作为类名使用
+	com.base.NULL
+
+6、java的动态代理机制
+    com.proxy.Client
+    
+
+5、生产者消费者模式详解及代码实现 http://www.2cto.com/kf/201310/248226.html
+	 测试类com.queue.ProducerConsumer
+
+4、java统计大文本文件操作
+	output1.txt  出现次数最多的人是【 D】  次数为：【41445】
+	K是千 M是兆 G是吉咖 T是太拉 
+	8bit(位)=1Byte(字节) 
+	1024Byte(字节)=1KB 
+	1024KB=1MB 
+	1024MB=1GB 
+	1024GB=1TB 
+	file.length()   单位为 Byte(字节)
+	
+	raf.MainTest.java   
+		Java 实现大文件统计字母出现个数  http://blog.csdn.net/anialy/article/details/39025891
+		RandomAccessFile能在文件里面前后移动，所以它的行为与其它的I/O类有些根本性的不同。比如定位用的getFilePointer( )，在文件里移动用的seek( )，以及判断文件大小的length( )、skipBytes()跳过多少字节数。
+		1、根据file的大小（long file.length），将文件平均分为N份（N可以根据总文件大小进行定义，N越大拆分文件越小，统计速度就越快）
+ 		2、开启N个线程分别进行统计（index从0开始，起始位：start = index * (length / N)，结束位：end = start + (length / N)）
+ 		3、再将N个统计的结果进行汇总
+ 		4、关键代码
+ 			 raf = new RandomAccessFile(file, "rw");  
+ 			 raf.seek(start);  
+ 			 while(raf.read(buff) != -1){  
+	mbb.TestApp.java
+		 用java多线程统计超大数据文件(1TB以上)中出现次数最多的人名   http://bbs.csdn.net/topics/390755701/
+		 MappedByteBuffer 将文件直接映射到内存（这里的内存指的是虚拟内存，并不是物理内存）。通常，可以映射整个文件，如果文件比较大的话可以分段进行映射，只要指定文件的那个部分就可以。
+		 FileChannel提供了map方法来把文件影射为内存映像文件： MappedByteBuffer map(int mode,long position,long size); 可以把文件的从position开始的size大小的区域映射为内存映像文件
+		 1、基本思路 和  第一种方式差不多
+		 index从0开始，起始位：start = index * (length / N)，
+		 	  	             结束位：end = (index + 1) *  (length / N)
+		 	  	           映射大小：size = length / N         
+		 2、 关键代码
+		   // 得到当前文件的通道
+            fileChannel = new RandomAccessFile(file, "rw").getChannel();
+            // 锁定当前文件的部分
+            lock = fileChannel.lock(start, end, false);
+            // 对当前文件片段建立内存映射，如果文件过大需要切割成多个片段  http://zheng12tian.iteye.com/blog/1100721
+          	//  其中第三个参数为映射文件的size大小，而不是结束位置，否则 就会出现源文件大小增加 （如果您请求一个超出文件大小的映射，文件会被增大以匹配映射的大小。） 
+            mbBuf = fileChannel.map(FileChannel.MapMode.READ_ONLY, start, size);
+		
+		
+		
+
+3、按位或|、逻辑或||的问题
+	com.base.CutOr
+2、List 删除元素问题  
+    com.base.ListRemove.java    使用迭代器中的 删除方法进行删除 ，不会出现异常，并且成功删除
+	ForEachTest 	Java for-each循环解惑
+	
+	
+1、在JAVA中，不用API中的函数，如何将String类型的转换成int类型数据
+   		com.base.ConvertStringToInt.java

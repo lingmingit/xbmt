@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+	<!-- Jetty Server 该服务器不支持  将 该配置文件 放到 其它jar包中；tomcat 支持 -->
+	<persistence-unit name="xbmt_www_mysql" transaction-type="RESOURCE_LOCAL">
+		 <provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<!--<jta-data-source>jdbc/xbmt_www_mysql</jta-data-source> 该种方式测试成功 jdbc/hgmk-ngwx_mysql-->
+		<!--<non-jta-data-source>java:comp/env/jdbc/together_mysql</non-jta-data-source>该种方式测试成功  jdbc/hgmk-ngwx_mysql-->
+		
+		<jta-data-source>jdbc/xbmt_www_mysql</jta-data-source>
+		
+		<!-- 显示指定 所有实体类 全路径 -->
+		<class>com.xbmt.test.entity.TestEntity</class>
+		
+		<class>com.xbmt.framework.entity.sys.SysUser</class>
+		<class>com.xbmt.sys.entity.FunctionAction</class>
+		<class>com.xbmt.sys.entity.Menu</class>
+		<class>com.xbmt.sys.entity.MenuFunAction</class>
+		<class>com.xbmt.sys.entity.Modules</class>
+		
+		<properties>
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.hbm2ddl.auto" value="update" /><!-- create update none -->
+			<!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
+			<property name="javax.persistence.validation.mode" value="none" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" /><!--org.hibernate.dialect.OracleDialect org.hibernate.dialect.MySQL5InnoDBDialect -->
+			
+			<property name="hibernate.archive.autodetection" value="false" />
+			<property name="hibernate.transaction.auto_close_session" value="false" />
+			
+			<property name="hibernate.max_fetch_depth" value="3" />
+			<property name="hibernate.cache.use_second_level_cache" value="true" />
+			 <property name="hibernate.cache.use_structured_entries" value="true" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
+			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.EhCacheProvider" /> 
+		</properties>
+	</persistence-unit>
+</persistence>

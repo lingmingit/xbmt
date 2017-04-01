@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+	<!-- <diskStore path="F:/workspace_xbmt_net/ehcache/cache" /> -->
+	<diskStore path="java.io.tmpdir"/>
+	 
+	<!-- 配置分布式缓存   成员发现插件 -->
+	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"  
+			properties="peerDiscovery=manual,rmiUrls=//localhost:40001/xbmtCache|//localhost:40002/xbmtCache"/>
+
+      <!--
+			搜索某个网段上的缓存
+			timeToLive
+			    0是限制在同一个服务器
+			    1是限制在同一个子网
+			    32是限制在同一个网站
+			    64是限制在同一个region
+			    128是限制在同一个大洲
+			    255是不限制
+			-->
+	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+   	 		properties="peerDiscovery=automatic, multicastGroupAddress=230.0.0.1,multicastGroupPort=4446, timeToLive=0"/>		
+			
+	<!-- 配置分布式缓存  成员监听器 插件-->
+	<cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory" 
+		    properties="hostName=localhost, port=40001,socketTimeoutMillis=2000"/>
+		    
+		   
+
+	
+	
+	<defaultCache maxElementsInMemory="100000" eternal="false"
+		timeToIdleSeconds="72000" timeToLiveSeconds="72000" overflowToDisk="false" />
+	<cache name="xbmtCache" maxElementsInMemory="10000"
+		maxElementsOnDisk="1000" eternal="false" overflowToDisk="true"
+		diskSpoolBufferSizeMB="500" timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" >
+		<!-- 监听RMI同步缓存对象配置 注册相应的的缓存监听类，用于处理缓存事件，如put,remove,update,和expire -->
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+		properties="replicateAsynchronously=true,replicatePuts=true, replicateUpdates=true, replicateUpdatesViaCopy=false, replicateRemovals=true"/>
+		
+	   <!-- 用于在初始化缓存，以及自动设置 
+      <bootstrapCacheLoaderFactory class="net.sf.ehcache.bootstrap.BootstrapCacheLoaderFactory"/> -->
+	</cache>
+	<cache name="functionOperationCache" maxElementsInMemory="10000"
+		maxElementsOnDisk="1000" eternal="false" overflowToDisk="true"
+		diskSpoolBufferSizeMB="500" timeToIdleSeconds="300" timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" />
+	
+	
+</ehcache>

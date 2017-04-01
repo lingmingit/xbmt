@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xbmt.framework.mapper.SysUserMapper" >
+
+    <!-- 插入一条城市记录   测试成功-->
+    <insert id="add" parameterType="com.xbmt.framework.entity.sys.SysUser">
+    	<!-- 利用数据库生成uuid主键 -->
+    	<selectKey keyProperty="id" resultType="String" order="BEFORE">  
+	        select replace(uuid(),'-','')  from dual
+	    </selectKey>  
+    
+    	insert into t_sys_user (id, numbers, name, simpleName, isEnable, isSystem ,
+    	creator_id , createTime , description ,
+    	sex , birthday , age ,email ,password
+    	)
+        values (#{id, jdbcType=VARCHAR} , #{numbers,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{simpleName,jdbcType=VARCHAR},#{isEnable,jdbcType=BIT},#{isSystem,jdbcType=BIT},
+        #{creator.id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR} ,
+        #{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},#{age,jdbcType=INTEGER},#{email,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR}
+        )
+    </insert>
+    
+     <!-- 检查用户名是否重复String -->
+    <select id="getUserByAccount" resultType="com.xbmt.framework.entity.sys.SysUser" parameterType="java.lang.String">
+		select c.id,c.numbers, c.name ,c.simpleName,c.isEnable,c.isSystem,
+		c.creator_id , c.createTime , c.description  ,
+		c.sex , c.birthday , c.age ,c.email ,c.password
+        from t_sys_user c 
+        where 1 = 1 and numbers = #{numbers}
+        <!--第一使用注释  方法参数增加 @Param("numbers")，测试成功 -->
+        <!-- 第二使用 _parameter 作为参数，测试成功 -->
+        <if test="id != null and id != ''">
+		    and c.id != #{id}
+        </if>
+    </select>
+
+    <!-- 列表查询   参数为Map  测试成功 -->
+    <select id="getList" resultType="com.xbmt.framework.entity.sys.SysUser" parameterType="java.util.HashMap">
+		select c.id,c.numbers, c.name ,c.simpleName,c.isEnable,c.isSystem,
+		c.creator_id , c.createTime , c.description  ,
+		c.sex , c.birthday , c.age ,c.email ,c.password
+        from t_sys_user c 
+        where 1 = 1
+        <!-- 使用#号会自动增加引号，如果$符号 自己增加引号 -->
+        <if test="numbers != null and numbers != ''">
+        	and c.numbers like '%${numbers}%'   <!-- '%${numbers}%' 测试成功    %#{numbers}% 会出现异常-->
+        	<!-- and c.numbers = '${numbers}' 测试成功-->
+		    <!-- and c.numbers = #{numbers} 测试成功-->
+        </if>
+        order by c.createTime desc
+    </select>
+    
+     <!-- 列表查询  参数为String -->
+    <select id="getList2" resultType="com.xbmt.framework.entity.sys.SysUser" parameterType="java.lang.String">
+		select c.id,c.numbers, c.name ,c.simpleName,c.isEnable,c.isSystem,
+		c.creator_id , c.createTime , c.description  ,
+		c.sex , c.birthday , c.age ,c.email ,c.password
+        from t_sys_user c 
+        where 1 = 1
+        <!--第一使用注释  方法参数增加 @Param("numbers")，测试成功 -->
+        <!-- 第二使用 _parameter 作为参数，测试成功 -->
+        <if test="numbers != null and numbers != ''">
+		    and c.numbers like #{numbers}
+        </if>
+        order by c.createTime desc
+    </select>
+    
+    <!-- 单个查询 测试成功 -->
+    <select id="findUserByLoginName" resultType="com.xbmt.framework.entity.sys.SysUser" parameterType="java.lang.String">
+    	<!-- 测试成功 -->
+    	select c.* from t_sys_user c  where c.numbers = #{userName}
+    </select>
+    <!-- 单个查询 测试成功 -->
+    <select id="get" resultType="com.xbmt.framework.entity.sys.SysUser" parameterType="java.lang.String">
+    	<!-- 测试成功 -->
+    	select c.*
+        from t_sys_user c  where c.id = #{id}
+        
+      <!--测试成功
+        select c.id,c.numbers, c.name ,c.simpleName,c.isEnable,c.isSystem,
+		c.creator_id , c.createTime , c.description  ,
+		c.sex , c.birthday , c.age ,c.email ,c.password
+        from t_sys_user c  where c.id = #{id} -->
+    </select>
+    
+    <!-- 修改   测试成功-->  
+    <update id="update" parameterType="com.xbmt.framework.entity.sys.SysUser">
+        update t_sys_user set numbers = #{numbers},  name = #{name} , modifier_id=#{modifier.id} , modifyTime=#{modifyTime} where id = #{id}
+    </update>  
+    
+    <!-- 删除   测试成功-->  
+    <delete id="delete" parameterType="java.lang.String">  
+        delete from t_sys_user where id = #{id}  
+    </delete>  
+</mapper>

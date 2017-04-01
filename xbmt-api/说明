@@ -1,0 +1,65 @@
+
+
+使用Spring MVC 做API接口
+前台 WAP、APP数据接口[RESTful]
+
+4、切换两种认证模式注意点
+    4.1、security-ns.xml 配置文件更名
+    4.2、LoginAuthController 中注解 注释
+    4.3、前台 app.js 拦截器、登录页面  路由 设置Controller
+
+
+3、【spring-security +自定义token算法  用户认证 案例，测试成功 2016-07-14】
+    http://www.jianshu.com/p/1b29534acac8 Spring Security实践（二）：简单认证的实现
+          相关后台代码：
+	com.xbmt.api.controller.LoginAuth3Controller
+	com.xbmt.auth3.**.java
+	com.xbmt.auth3.AuthenticationTokenProcessingFilter
+	com.xbmt.auth3.UnauthorizedEntryPoint
+	com.xbmt.auth3.TokenUtils
+	前台代码：LoginCtrl3、UserService3、Auth、UserInterceptor3
+	 login.html、app.js 等
+	 security-ns(自定义token算法认证).xml
+
+  
+2、【spring-security +HTTP摘要认证  用户认证 案例，测试成功 2016-07-14】
+   第二种、【spring-security + HTTP摘要认证】
+          为一个REST服务使用Spring Security的基本和摘要认证  http://my.oschina.net/buwei/blog/193576  
+     Spring Http Basic（基本）和Digest（摘要）验证  http://blog.csdn.net/mrcharles/article/details/50475467
+     http协议之digest(摘要)认证   http://blog.csdn.net/jszj/article/details/8918967
+          相关后台代码：
+	com.xbmt.api.controller.LoginAuth2Controller
+	com.xbmt.auth2.**.java
+	com.xbmt.auth2.MyDigestAuthenticationEntryPoint
+	com.xbmt.auth2.MyDigestAuthenticationFilter
+	com.xbmt.auth2.MyTokenUtils
+	com.xbmt.auth2.MyDigestAuthUtils
+	前台代码：LoginCtrl2、UserService2、Auth、UserInterceptor2
+	 login.html、app.js 等
+	  security-ns(HTTP摘要认证).xml
+	  问题：由于此种方式是通过浏览器弹出框 提示用户登录，存在问题 不能嵌入自己的登录，所以考虑重写过滤器 和  切入点类 返回json格式
+	  已经初步解决该问题 并测试成功2016-07-15
+	
+	  
+   
+
+
+security-ns.xml
+security-ns(http摘要).xml  基于http 摘要认证配置文件，配置成功，但是还未找到怎么与前台登录结合起来（默认使用浏览器弹窗口登录）
+security-ns(用户信息固定配置文件).xml 用户信息固定到配置文件中
+
+
+
+http://127.0.0.1:8080/xbmt-api/j_spring_security_check
+header头： 
+   Authorization Digest username="user",realmName="Contacts Realm via Digest Authentication",nonce="MTIwMDAwOmM1ZjBmNDc1M2RhYTFhYWYwZTI3NjdhNDBlMDY2ZjRi"
+   
+   
+   
+ pwd 123456 =  e10adc3949ba59abbe56e057f20f883e 
+
+   
+   
+16:47:58,514  INFO DigestUtil:32 - temp=120000:c5f0f4753daa1aaf0e2767a40e066f4b
+16:47:58,528  INFO DigestUtil:34 - nonce=MTIwMDAwOmM1ZjBmNDc1M2RhYTFhYWYwZTI3NjdhNDBlMDY2ZjRi
+16:47:58,530  INFO DigestUtil:101 - decoded=120000:c5f0f4753daa1aaf0e2767a40e066f4b

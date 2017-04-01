@@ -1,0 +1,26 @@
+
+
+
+F:\workspace_xbmt_net\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps
+
+2016-08-25
+搭建环境熟悉myBatis(持久层)、Redis(缓存)、shiro(认证框架)
+
+
+
+
+
+
+3、redis集群配置 1 【测试异常】
+   core-applicationContext.xml
+   
+    参考链接：http://www.cnblogs.com/zr520/p/5057141.html  Redis配置集群二（window）
+     http://www.cnblogs.com/zr520/p/5062025.html spring 使用redis集群配置
+	
+2、 Spring + Cache + redis 实现配置 【测试成功】
+  core-applicationContext(SpringCache).xml
+    参考链接：http://hanqunfeng.iteye.com/blog/2176172  Spring Cache注解+Redis
+  
+1、 Spring + AOP 方法拦截器实现redis 缓存 【测试成功】
+  core-applicationContext(方法拦截器).xml
+    参考链接： http://blog.csdn.net/u013142781/article/details/50515320  Redis+Spring缓存实例（windows环境，附实例源码及详解）

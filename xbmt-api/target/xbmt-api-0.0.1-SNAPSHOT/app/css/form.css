@@ -1,0 +1,21 @@
+form input.ng-dirty.ng-invalid {
+    border-color: #e9322d;
+    -webkit-box-shadow: 0 0 6px #f8b9b7;
+    -moz-box-shadow: 0 0 6px #f8b9b7;
+    box-shadow: 0 0 6px #f8b9b7;
+    border:#e9322d 1px solid;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+
+.yhdl{
+	text-align: center;
+}
+.yhdl span{
+	display:block;
+	font-size:10px;
+	color:#FFF;
+	text-align:center;
+}

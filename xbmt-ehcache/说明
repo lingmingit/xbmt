@@ -1,0 +1,35 @@
+
+
+
+
+
+
+后台登录链接
+http://127.0.0.1:8080/xbmt-ehcache/xbmtadmin/console/login
+
+
+
+ JPA + Hibernate（启用二级缓存） + Ehcache
+
+
+
+
+  2、第二个版本测试  2016-07-29 【echcache_V2配置  测试成功】 
+	JPA 2.1 + Hibernate 5.0 + Ehcache 2.4.7
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-entitymanager\5.0.5.Final\hibernate-entitymanager-5.0.5.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-core\5.0.5.Final\hibernate-core-5.0.5.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\common\hibernate-commons-annotations\5.0.1.Final\hibernate-commons-annotations-5.0.1.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\javax\persistence\hibernate-jpa-2.1-api\1.0.0.Final\hibernate-jpa-2.1-api-1.0.0.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-ehcache\5.0.0.Final\hibernate-ehcache-5.0.0.Final.jar
+	E:\maven_repository\mvn_repository\net\sf\ehcache\ehcache-core\2.4.7\ehcache-core-2.4.7.jar
+
+  1、第一个版本测试成功说明 2016-07-28 【echcache_V1配置   测试成功】  使用 yjg的配置
+	JPA 2.0 + Hibernate 4.0 + Ehcache 2.4.7
+	E:\maven_repository\mvn_repository\org\hibernate\javax\persistence\hibernate-jpa-2.0-api\1.0.1.Final\hibernate-jpa-2.0-api-1.0.1.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-tools\4.0.0-CR1\hibernate-tools-4.0.0-CR1.jar
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-core\4.0.0.Final\hibernate-core-4.0.0.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\common\hibernate-commons-annotations\4.0.1.Final\hibernate-commons-annotations-4.0.1.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-commons-annotations\3.2.0.Final\hibernate-commons-annotations-3.2.0.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-entitymanager\4.0.0.Final\hibernate-entitymanager-4.0.0.Final.jar
+	E:\maven_repository\mvn_repository\org\hibernate\hibernate-ehcache\4.0.1.Final\hibernate-ehcache-4.0.1.Final.jar
+	E:\maven_repository\mvn_repository\net\sf\ehcache\ehcache-core\2.4.7\ehcache-core-2.4.7.jar

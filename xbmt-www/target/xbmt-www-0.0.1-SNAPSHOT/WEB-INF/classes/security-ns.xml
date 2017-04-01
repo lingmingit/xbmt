@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	<security:http pattern="/**/*.png" security="none" />
+	<security:http pattern="/**/*.gif" security="none" />
+	<security:http pattern="/**/*.jpg" security="none" />
+	<security:http pattern="/**/*.css" security="none" />
+	<security:http pattern="/**/*.js" security="none" />
+	<security:http pattern="/**/*.ico" security="none" />
+	<!-- 后台登录验证码 -->
+	<security:http pattern="/captcha.svl"  security="none"/>
+	<!-- 后台登录页面 不需要安全认证-->
+	<security:http pattern="/xbmtadmin/console/login"  security="none"/>
+	<!-- 后台登录验证码 -->
+	<security:http pattern="/xbmtadmin/console/validateCode/*"  security="none"/>
+	
+	<security:http pattern="/test/**" security="none"/>
+	<!-- 上传的文件  不需要安全认证-->
+	<security:http pattern="/uploadDir/**" security="none"/>
+	<!-- 前台  不需要安全认证 -->
+	<security:http pattern="/front/**" security="none"/>
+	
+	<security:http pattern="/html/**" security="none"/>
+	
+	<security:http pattern="/swf/**" security="none"/>
+	
+	<security:http entry-point-ref="authenticationEntryPoint" use-expressions="true" create-session="never">
+		<security:intercept-url pattern="/**" access="hasRole('ROLE_HGMK_USER')" />
+		<!-- 重写自定义Filter 设置 登录表单默认 提交参数名称，如：j_username 、j_password -->
+		<security:custom-filter position="FORM_LOGIN_FILTER" ref="authenticationFilter" />
+		<security:logout invalidate-session="true" delete-cookies="JSESSIONID" logout-success-url="/xbmtadmin/console/login?type=logout"   logout-url="/j_spring_security_logout"/>  
+	</security:http>
+	
+	
+	<bean id="userDetailsService" class="com.xbmt.auth.UserDetailServiceImpl">
+		<property name="userService" ref="sys.userService" />
+	</bean>
+	
+	<bean id="authenticationProvider" class="com.xbmt.auth.SimpleAuthenticationProvider">
+		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="userService" ref="sys.userService" />
+	</bean>
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider ref="authenticationProvider" />
+	</security:authentication-manager>
+
+ 	<!-- 登录验证器 -->
+	<bean id="authenticationFilter" class="com.xbmt.auth.AuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationSuccessHandler" ref="successHandler"/>
+		<property name="authenticationFailureHandler" ref="simpleUrlAuthenticationFailureHandler"/>
+	</bean>
+	<!-- 认证成功 调整的默认页面 -->
+	<bean id="successHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler" >
+		<property name="defaultTargetUrl" value="/xbmtadmin/console/index" />
+	</bean>
+	<!-- 认证失败 调整的默认页面-->
+	<bean id="simpleUrlAuthenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/xbmtadmin/console/login?type=loginError"/>
+	</bean>
+	
+	<!-- 未登录的切入点 -->
+	<bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<property name="loginFormUrl" value="/xbmtadmin/console/login" />
+	</bean>
+</beans>

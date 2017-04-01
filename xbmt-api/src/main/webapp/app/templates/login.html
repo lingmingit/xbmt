@@ -1,0 +1,57 @@
+<ion-view view-title="登录"  hide-nav-bar="true" >
+  <ion-header-bar class="bg_color no_border" style="background-image:none">
+        <button class="button bg_color" ng-click="goBack();" >
+           <i class="icon ion-chevron-left dark" ></i>  <!-- -->
+        </button>
+		 <a class="button button-clear button-positive" href="#/register">注册</a>
+    </ion-header-bar>
+  <ion-content class="padding" overflow-scroll="false">
+		<div class="row padding-bottom">
+			<div class="login_logo"><!-- class="item-image" -->
+				<img  ng-src="{{user.logo}}"   ><!-- src="img/login-logo.png"  -->
+			</div>
+		</div>
+		 <form id="login_form" name="login_form" role="form" novalidate="">
+			<div class="row" >
+	  			<span class="col col-10 border_bottom_line label_icon row_height"><i class="icon xbmt-user dark"></i></span>
+	  			<span class="col col-90 border_bottom_line light-bg row_height" >
+	  				<input autofocus="" type="tel" placeholder="请输入手机号" ng-model="user.username" 
+                    name="username" style="width: 100%;" required>
+	  			</span>
+	  		</div>
+	  		<div class="row">
+	  			<span class="col col-10 border_bottom_line label_icon row_height" ><i class="icon xbmt-unlock dark"></i></span>
+	  			<span class="col col-90 border_bottom_line light-bg row_height">
+	  				<input type="password" name="password" placeholder="输入您的设置密码" ng-model="user.password"  style="width: 90%" required>
+	  			</span>
+	  		</div>
+	  		<div class="row row-center">
+	  			<a class="col" href="#/forgetpwd"><i class="icon ion-ios-help dark"></i><font style="font-size: 12px;padding-left: 4px;">忘记密码</font></a>
+	  		</div>
+	  		<!-- <div class="row row-center" style="font-size: 12px;">
+	  			<label class="checkbox">
+					<input type="checkbox" checked>
+				</label>
+				记住密码
+	  		</div> -->
+			<div class="padding-left padding-right">
+				<button class="button button-block button-positive" ng-click="user.loginValid(login_form);">登录</button>
+			</div>
+			
+			 <div ng-show="user.show_error">
+                <div ng-show="login_form.username.$error.required"class="yhdl" style="margin-top:8px;">
+                    <span style="color:#F00;">账户名不能为空</span>
+                </div>
+                <div ng-show="login_form.username.$error.pattern" class="yhdl" style="margin-top:8px;">
+                    <span style="color:#F00;">手机号填写不正确</span>
+                </div>
+                <div ng-show="login_form.password.$error.required" class="yhdl" style="margin-top:8px;">
+                    <span style="color:#F00;">密码不能为空</span>
+                </div>
+                <div ng-show="user.error_msg" class="yhdl" style="margin-top:8px;">
+                    <span style="color:#F00;">{{user.error_msg}}</span>
+                </div>
+             </div>
+		 </form>
+  </ion-content>
+</ion-view>

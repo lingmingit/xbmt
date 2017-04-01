@@ -1,0 +1,9 @@
+
+
+
+测试集群部署应用
+
+F:\workspace_xbmt_net\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps
+
+测试多实例管理session页面
+http://localhost:8081/xbmt-colony/front/session.jspx

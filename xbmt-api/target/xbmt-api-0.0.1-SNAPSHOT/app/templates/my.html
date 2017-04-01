@@ -1,0 +1,32 @@
+<ion-view view-title="我的"  hide-nav-bar="false" hide-tabs="false">
+
+  <ion-content overflow-scroll="false">
+     <h1>我的</h1>
+     <h2><a ng-click="logout();"> 退出</a></h2>
+     <div class="row">
+    	 <span>id=</span><span>{{userInfo.id}}</span>
+     </div>
+     <div class="row">
+    	 <span>username=</span><span>{{userInfo.username}}</span>
+     </div>
+      <div class="row">
+    	 <span>password=</span><span>{{userInfo.password}}</span>
+     </div>
+      <div class="row">
+    	 <span>token=</span><br/>
+    	 <span>{{userInfo.token}}</span>
+     </div>
+      <div class="row">
+    	 <span>promocode=</span><span>{{userInfo.promocode}}</span>
+     </div>
+      <div class="row">
+    	 <span>authKey=</span><span>{{userInfo.authKey}}</span>
+     </div>
+      <div class="row">
+    	 <span>mobile=</span><span>{{userInfo.mobile}}</span>
+     </div>
+      <div class="row">
+    	 <span>roles=</span><span>{{userInfo.roles}}</span>
+     </div>
+  </ion-content>
+</ion-view>

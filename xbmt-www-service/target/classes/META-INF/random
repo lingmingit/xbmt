@@ -1,0 +1,6 @@
+
+
+JPA配置文件说明【META-INF/persistence.xml】
+	1、实体在哪个 jar包中(子项目) 就将该文件放置其中，如果需要其它jar中的实体，就需要显示指定某个具体类，如下：
+		<class>com.framework.entity.sys.SysUser</class>
+	2、如果将该文件放到 Web解决方案中，则全部需要显示指定持久化类
